@@ -22,9 +22,9 @@ void ClearScrean() {
 #endif
 	//cout;
 }
-void Enter() {
+void Enter(int press_enter) {
 	string enter;
-	cin.ignore();
+	if(press_enter == 0)cin.ignore();
 	do {
 		cout << "Нажмит enter что-бы продолжить: ";
 		getline(cin, enter);
@@ -231,7 +231,7 @@ int main() {
 		vector<vector<string>> mass_player; vector<vector<string>> mass_bot;
 		ResizeMass(mass_player);
 		ResizeMass(mass_bot);
-		int move = 0; choice = 1;
+		int move = 0, press_enter = 0; choice = 1;//press_enter - переменная для того, точбі нормально работал getline
 		string cell_map;
 		do {
 			InputSeaFight();
@@ -286,16 +286,16 @@ int main() {
 				Shot_Sound(shot_1, shot_2, shot_3, shot_4);
 				Print(mass_bot, mass_player);
 				cout << "Бот стрельнул на ячейку " << cell_map << endl;
-				Enter();
-				if (temp_num == 0)move = 0;
-				else if (temp_num >= 1) amount_attackedcell_bot++;
+				Enter(press_enter);
+				if (temp_num == 0) { press_enter = 0; move = 0; }
+				else if (temp_num >= 1) { press_enter = 1; amount_attackedcell_bot++; }
 			}
 			cell_map = "";
 			if (amount_sunkboat_bot == 6) { Print(mass_bot, mass_player); win.play(); cout << "ВЫ ПОБЕДИЛИ!"<<endl; break; }
 			else if (amount_sunkboat_player == 6) { Print(mass_bot, mass_player); loss.play(); cout << "БОТ ПОБЕДИЛИ!"<<endl; break; }
 		} while (true);
 		mass_bot.resize(0); mass_player.resize(0);
-		Enter();
+		Enter(press_enter);
 		Menu(3,background_music);
 	}
 	return 0;
